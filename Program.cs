@@ -34,6 +34,7 @@ builder.Services.AddScoped<TransactionService>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<AccountService>();
+builder.Services.AddScoped<AuditLogService>();
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {

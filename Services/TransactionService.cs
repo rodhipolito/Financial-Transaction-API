@@ -7,10 +7,12 @@ namespace FinancialTransactionAPI.Services;
 public class TransactionService
 {
     private readonly AppDbContext _db;
+    private readonly AuditLogService _auditLog;
 
-    public TransactionService(AppDbContext db)
+    public TransactionService(AppDbContext db, AuditLogService auditLog)
     {
         _db = db;
+        _auditLog = auditLog;
     }
 
     public async Task<Transaction?> DepositAsync(Guid accountId, Guid userId, decimal amount, string description)
@@ -34,6 +36,10 @@ public class TransactionService
 
         _db.Transactions.Add(transaction);
         await _db.SaveChangesAsync();
+
+        await _auditLog.LogAsync("Deposit", "Transaction", transaction.Id.ToString(),
+            $"Amount: {amount} {account.Currency}", userId);
+
         return transaction;
     }
 
@@ -58,6 +64,10 @@ public class TransactionService
 
         _db.Transactions.Add(transaction);
         await _db.SaveChangesAsync();
+
+        await _auditLog.LogAsync("Withdrawal", "Transaction", transaction.Id.ToString(),
+            $"Amount: {amount} {account.Currency}", userId);
+
         return transaction;
     }
 
@@ -87,6 +97,10 @@ public class TransactionService
 
         _db.Transactions.Add(transaction);
         await _db.SaveChangesAsync();
+
+        await _auditLog.LogAsync("Transfer", "Transaction", transaction.Id.ToString(),
+            $"Amount: {amount} from {fromAccountId} to {toAccountId}", userId);
+
         return transaction;
     }
 
