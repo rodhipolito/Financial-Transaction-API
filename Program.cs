@@ -19,6 +19,7 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(
             "http://localhost:3000",
+            "https://financial-transaction-frontend-nw6o5r22o.vercel.app",
             "https://financial-transaction-frontend.vercel.app"
         )
         .AllowAnyHeader()
