@@ -78,10 +78,29 @@ Enter exactly: `Bearer YOUR_TOKEN_HERE` and click **Authorize**.
 
 ---
 
-### Step 5 — Explore!
+### Step 5 — Transfer funds (optional)
+
+Search for another user's account:
+`GET /api/Accounts/search?q=name_or_email`
+
+Then transfer:
+`POST /api/Transactions/transfer`
+```json
+{
+  "fromAccountId": "YOUR_ACCOUNT_ID",
+  "toAccountId": "RECIPIENT_ACCOUNT_ID",
+  "amount": 100,
+  "description": "Payment"
+}
+```
+
+---
+
+### Step 6 — Explore!
 | Action | Endpoint |
 |--------|----------|
 | Withdraw funds | `POST /api/Transactions/withdraw` |
+| Search recipient accounts | `GET /api/Accounts/search?q=name` |
 | Transfer between accounts | `POST /api/Transactions/transfer` |
 | Check transaction history | `GET /api/Transactions/{accountId}` |
 | View all your accounts | `GET /api/Accounts` |
@@ -102,6 +121,7 @@ Enter exactly: `Bearer YOUR_TOKEN_HERE` and click **Authorize**.
 | POST | /api/Accounts | Create a new account |
 | GET | /api/Accounts | List all user accounts |
 | GET | /api/Accounts/{id} | Get account by ID |
+| GET | /api/Accounts/search?q= | Search accounts by name or email |
 
 ### 💸 Transactions
 | Method | Endpoint | Description |
