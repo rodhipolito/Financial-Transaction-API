@@ -43,20 +43,21 @@ public class AccountService
 
     public async Task<List<AccountSearchResult>> SearchAccountsAsync(string query, Guid excludeUserId)
     {
-        return await _db.Accounts
+        var accounts = await _db.Accounts
             .Include(a => a.User)
             .Where(a => a.IsActive &&
                         a.UserId != excludeUserId &&
                         (a.User.Name.Contains(query) || a.User.Email.Contains(query)))
-            .Select(a => new AccountSearchResult
-            {
-                Id = a.Id,
-                UserName = a.User.Name,
-                Email = a.User.Email,
-                Currency = a.Currency,
-                Type = a.Type.ToString()
-            })
             .ToListAsync();
+
+        return accounts.Select(a => new AccountSearchResult
+        {
+            Id = a.Id,
+            UserName = a.User.Name,
+            Email = a.User.Email,
+            Currency = a.Currency,
+            Type = a.Type.ToString()
+        }).ToList();
     }
 }
 
