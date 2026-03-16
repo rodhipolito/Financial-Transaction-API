@@ -50,14 +50,13 @@ public class AccountService
                         (a.User.Name.Contains(query) || a.User.Email.Contains(query)))
             .ToListAsync();
 
-        return accounts.Select(a => new AccountSearchResult
-        {
-            Id = a.Id,
-            UserName = a.User.Name,
-            Email = a.User.Email,
-            Currency = a.Currency,
-            Type = a.Type.ToString()
-        }).ToList();
+        return accounts.Select(a => new AccountSearchResult(
+            a.Id,
+            a.User.Name,
+            a.User.Email,
+            a.Currency,
+            a.Type.ToString()
+        )).ToList();
     }
 }
 
