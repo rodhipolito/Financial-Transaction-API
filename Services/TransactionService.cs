@@ -112,7 +112,7 @@ public class TransactionService
         if (account == null) return new List<Transaction>();
 
         return await _db.Transactions
-            .Where(t => t.AccountId == accountId)
+            .Where(t => t.AccountId == accountId || t.DestinationAccountId == accountId)
             .OrderByDescending(t => t.CreatedAt)
             .ToListAsync();
     }
