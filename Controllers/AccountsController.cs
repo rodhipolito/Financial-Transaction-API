@@ -50,6 +50,22 @@ public class AccountsController : ControllerBase
     }
 
     /// <summary>
+    /// Searches accounts by recipient name or email (excludes own accounts).
+    /// </summary>
+    /// <param name="q">Search query (min 2 characters)</param>
+    /// <returns>List of matching accounts</returns>
+    [HttpGet("search")]
+    public async Task<IActionResult> Search([FromQuery] string q)
+    {
+        if (string.IsNullOrWhiteSpace(q) || q.Length < 2)
+            return BadRequest(new { message = "Query too short." });
+
+        var currentUserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var results = await _accountService.SearchAccountsAsync(q, currentUserId);
+        return Ok(results);
+    }
+
+    /// <summary>
     /// Returns a specific account by ID.
     /// </summary>
     /// <param name="id">The account ID (GUID)</param>
