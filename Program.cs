@@ -17,13 +17,12 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.SetIsOriginAllowed(origin =>
-            origin == "http://localhost:3000" ||
-            new Uri(origin).Host.EndsWith(".vercel.app") ||
-            new Uri(origin).Host == "vercel.app"
-        )
-        .AllowAnyHeader()
-        .AllowAnyMethod();
+        policy.WithOrigins(
+                "http://localhost:3000",
+                "https://financial-transaction-frontend-six.vercel.app"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod();
     });
 });
 
@@ -99,8 +98,9 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
+// ✅ CORS tem de ser PRIMEIRO, antes de tudo
 app.UseCors("AllowFrontend");
+app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
